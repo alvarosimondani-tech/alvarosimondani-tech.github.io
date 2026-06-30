@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección de Asientos - Sala 1</title>
+    <style>
+        :root {
+            --bg-color: #0f0f13;
+            --card-bg: #1a1a24;
+            --vip-color: #ffd700;
+            --seat-available: #3a3a4f;
+            --seat-selected: #e50914;
+            --text-color: #ffffff;
+            --text-muted: #8a8a9e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { width: 100%; max-width: 800px; background-color: var(--card-bg); border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); text-align: center; }
+        h1 { font-size: 24px; margin-bottom: 5px; }
+        .subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 40px; }
+
+        /* Estructura de la sala copiando tu dibujo */
+        .cinema-room { position: relative; margin: 0 auto 40px auto; width: 100%; max-width: 600px; height: 380px; }
+        .seating-area { position: absolute; top: 0; left: 0; width: 100%; height: 220px; }
+
+        /* El Sofá Gigante de la izquierda (1) */
+        .vip-giant-bed {
+            position: absolute; top: 0; left: 5%; width: 28%; height: 210px;
+            background: linear-gradient(135deg, #2c2500 0%, #1a1500 100%);
+            border: 3px solid var(--vip-color); border-radius: 12px; cursor: pointer;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: all 0.3s;
+        }
+        .vip-giant-bed:hover { transform: scale(1.02); background: #3d3300; }
+        .vip-giant-bed.selected { background: #e50914; border-color: #ff4d56; }
+        .vip-giant-bed .label { font-size: 24px; font-weight: bold; color: var(--vip-color); }
+        .vip-giant-bed.selected .label { color: #fff; }
+        .vip-giant-bed .number { font-size: 14px; margin-top: 5px; opacity: 0.8; }
+
+        /* Butacas de la derecha (2 y 3) */
+        .right-seats { position: absolute; top: 0; left: 38%; width: 57%; height: 85px; display: flex; gap: 15px; }
+        .seat-block {
+            flex: 1; height: 100%; background-color: var(--seat-available);
+            border: 2px solid #555570; border-radius: 10px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; font-weight: bold; transition: all 0.3s;
+        }
+        .seat-block:hover { transform: scale(1.03); background-color: #4a4a66; }
+        .seat-block.selected { background-color: var(--seat-selected); border-color: #ff4d56; }
+
+        /* El proyector del centro */
+        .projector-container { position: absolute; top: 115px; left: 38%; width: 57%; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); font-size: 11px; letter-spacing: 2px; }
+        .projector-icon { width: 24px; height: 14px; background-color: #444; border-radius: 3px; margin-bottom: 6px; }
+
+        /* La pantalla abajo */
+        .screen-container { position: absolute; bottom: 0; width: 100%; text-align: center; }
+        .screen-line { width: 90%; height: 4px; background: #ffffff; border-radius: 50%; margin: 0 auto 10px auto; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
+        .screen-text { font-size: 12px; color: var(--text-muted); letter-spacing: 4px; }
+
+        /* Leyenda e información */
+        .legend { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; font-size: 14px; }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .legend-color { width: 16px; height: 16px; border-radius: 4px; }
+        .booking-summary { border-top: 1px solid #2a2a3a; padding-top: 25px; }
+        .summary-text { font-size: 16px; margin-bottom: 20px; color: var(--text-muted); }
+        .btn-confirm { background-color: var(--seat-selected); color: white; border: none; padding: 14px 36px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; max-width: 300px; }
+        .btn-confirm:disabled { background-color: #3a3a4f; color: var(--text-muted); cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>SALA 1 - SELECCIÓN DE ASIENTOS</h1>
+    <p class="subtitle">Haz clic en los espacios del mapa para agregarlos a tu reserva</p>
+
+    <div class="cinema-room">
+        <div class="seating-area">
+            <div class="vip-giant-bed" id="seat-1" onclick="toggleSeat('1', 'Mega Sofá VIP (Cama 1)', 30.00)">
+                <span class="label">VIP</span>
+                <span class="number">Espacio 1</span>
+            </div>
+
+            <div class="right-seats">
+                <div class="seat-block" id="seat-2" onclick="toggleSeat('2', 'Butaca Estándar 2', 12.00)">2</div>
+                <div class="seat-block" id="seat-3" onclick="toggleSeat('3', 'Butaca Estándar 3', 12.00)">3</div>
+            </div>
+
+            <div class="projector-container">
+                <div class="projector-icon"></div>
+                <div>PROYECTOR</div>
+            </div>
+        </div>
+
+        <div class="screen-container">
+            <div class="screen-line"></div>
+            <div class="screen-text">PANTALLA</div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item"><div class="legend-color" style="background-color: var(--seat-available);"></div><span>Disponible</span></div>
+        <div class="legend-item"><div class="legend-color" style="border: 2px solid var(--vip-color);"></div><span>Sofá Gigante VIP</span></div>
+        <div class="legend-item"><div class="legend-color" style="background-color: var(--seat-selected);"></div><span>Seleccionado</span></div>
+    </div>
+
+    <div class="booking-summary">
+        <div class="summary-text" id="summary-desc">No has seleccionado ningún asiento.</div>
+        <button class="btn-confirm" id="btn-submit" disabled onclick="confirmBooking()">Confirmar Reserva</button>
+    </div>
+</div>
+
+<script>
+    let selectedSeats = {};
+
+    function toggleSeat(id, name, price) {
+        const element = document.getElementById(`seat-${id}`);
+        if (selectedSeats[id]) {
+            delete selectedSeats[id];
+            element.classList.remove('selected');
+        } else {
+            selectedSeats[id] = { name, price };
+            element.classList.add('selected');
+        }
+        updateSummary();
+    }
+
+    function updateSummary() {
+        const descEl = document.getElementById('summary-desc');
+        const btnEl = document.getElementById('btn-submit');
+        const keys = Object.keys(selectedSeats);
+        
+        if (keys.length === 0) {
+            descEl.innerHTML = "No has seleccionado ningún asiento.";
+            btnEl.disabled = true;
+        } else {
+            let seatList = keys.map(k => selectedSeats[k].name).join(', ');
+            let total = keys.reduce((sum, k) => sum + selectedSeats[k].price, 0);
+            descEl.innerHTML = `Seleccionado: <strong>${seatList}</strong><br><span style="color:#ffd700; font-size:18px; display:block; margin-top:8px;">Total: ${total.toFixed(2)}€</span>`;
+            btnEl.disabled = false;
+        }
+    }
+
+    function confirmBooking() {
+        alert("¡Reserva solicitada con éxito!");
+    }
+</script>
+</body>
+</html>
